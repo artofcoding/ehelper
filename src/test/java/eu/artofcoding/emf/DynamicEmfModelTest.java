@@ -1,15 +1,16 @@
-package eu.artofcoding.test.emf;
+package eu.artofcoding.emf;
 
 import org.eclipse.emf.ecore.*;
+import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.util.List;
 
 public class DynamicEmfModelTest {
 
-    private static final String namespaceUri = "http:///com.ibm.dynamic.example.bookstore.ecore";
+    private final String namespaceUri = "http:///com.ibm.dynamic.example.bookstore.ecore";
 
-    public static EPackage createModel() {
+    private EPackage createBookStoreModel() {
         final EModelHelper EH = EModelHelper.eINSTANCE();
         // Create EClass instance to model BookStore class
         final EClass bookStoreEClass = EH.createEClass("BookStore");
@@ -37,7 +38,7 @@ public class DynamicEmfModelTest {
         return ePackage;
     }
 
-    public static EObject createInstance(EPackage ePackage) {
+    private EObject createBookStoreInstance(EPackage ePackage) {
         final EFactory eFactory = ePackage.getEFactoryInstance();
         final EInstanceHelper eih = EInstanceHelper.eINSTANCE(eFactory);
         // Create dynamic instance of BookStoreEClass and BookEClass
@@ -58,15 +59,16 @@ public class DynamicEmfModelTest {
         return bookStoreEObject;
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void createSaveAndLoadEModel() {
         final long start = System.currentTimeMillis();
         // Create model
-        final EPackage ePackage = createModel();
+        final EPackage ePackage = createBookStoreModel();
         final EModelHelper emh = EModelHelper.eINSTANCE();
         emh.save(ePackage, Paths.get("bookStore.ecore"));
         // Create instance
         final EInstanceHelper eih = EInstanceHelper.eINSTANCE(ePackage.getEFactoryInstance());
-        final EObject eObject = createInstance(ePackage);
+        final EObject eObject = createBookStoreInstance(ePackage);
         eih.save(eObject, Paths.get("bookStore.xml"));
         // Load
         final EObject loadedBookStore = eih.load(namespaceUri, ePackage, Paths.get("bookStore.xml"));

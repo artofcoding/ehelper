@@ -1,6 +1,7 @@
-package eu.artofcoding.test.emf;
+package eu.artofcoding.emf;
 
 import org.eclipse.emf.ecore.*;
+import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ public class PlainDynamicEmfModelTest {
 
     private static final String namespaceUri = "http:///com.ibm.dynamic.example.bookstore.ecore";
 
-    public static EPackage createModel() {
+    private EPackage createBookStoreModel() {
         // Instantiate EcoreFactory
         final EcoreFactory eCoreFactory = EcoreFactory.eINSTANCE;
         // Instantiate EcorePackage
@@ -61,7 +62,7 @@ public class PlainDynamicEmfModelTest {
         return ePackage;
     }
 
-    public static EObject createInstance(EPackage ePackage) {
+    private EObject createBookStoreInstance(EPackage ePackage) {
         final EFactory eFactory = ePackage.getEFactoryInstance();
         // Create dynamic instance of BookStoreEClass and BookEClass
         final EClass bookStoreEClass = (EClass) ePackage.getEClassifier("BookStore");
@@ -86,15 +87,16 @@ public class PlainDynamicEmfModelTest {
         return bookStoreEObject;
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void createSaveAndLoadPlainEModel() {
         final long start = System.currentTimeMillis();
         // Create model
-        final EPackage ePackage = createModel();
+        final EPackage ePackage = createBookStoreModel();
         final EModelHelper emh = EModelHelper.eINSTANCE();
         final Path ecorePath = Paths.get("bookStore.ecore");
         emh.save(ePackage, ecorePath);
         // Create instance
-        final EObject eObject = createInstance(ePackage);
+        final EObject eObject = createBookStoreInstance(ePackage);
         final EInstanceHelper eih = EInstanceHelper.eINSTANCE(ePackage.getEFactoryInstance());
         final Path xmlPath = Paths.get("bookStore.xml");
         eih.save(eObject, xmlPath);

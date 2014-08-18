@@ -1,4 +1,4 @@
-package eu.artofcoding.test.emf;
+package eu.artofcoding.emf;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
