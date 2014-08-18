@@ -2,6 +2,7 @@ package eu.artofcoding.test.emf;
 
 import org.eclipse.emf.ecore.*;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -90,20 +91,22 @@ public class PlainDynamicEmfModelTest {
         // Create model
         final EPackage ePackage = createModel();
         final EModelHelper emh = EModelHelper.eINSTANCE();
-        emh.save(ePackage, Paths.get("bookStore.ecore"));
+        final Path ecorePath = Paths.get("bookStore.ecore");
+        emh.save(ePackage, ecorePath);
         // Create instance
         final EObject eObject = createInstance(ePackage);
         final EInstanceHelper eih = EInstanceHelper.eINSTANCE(ePackage.getEFactoryInstance());
-        eih.save(eObject, Paths.get("bookStore.xml"));
+        final Path xmlPath = Paths.get("bookStore.xml");
+        eih.save(eObject, xmlPath);
         // Load
-        final EObject loadedBookStore = eih.load(namespaceUri, ePackage, Paths.get("bookStore.xml"));
-        // Read/Get the values of bookStoreObject attributes
+        final EObject loadedBookStore = eih.load(namespaceUri, ePackage, xmlPath);
+        // Read/get the values of bookStoreObject attributes
         final EAttribute bookStoreOwner = (EAttribute) loadedBookStore.eClass().getEStructuralFeature("owner");
         final String _bookStoreOwner = (String) loadedBookStore.eGet(bookStoreOwner);
         final EAttribute bookStoreLocation = (EAttribute) loadedBookStore.eClass().getEStructuralFeature("location");
         final String _bookStoreLocation = (String) loadedBookStore.eGet(bookStoreLocation);
         System.out.printf("BookStore: %s, %s%n", _bookStoreOwner, _bookStoreLocation);
-        // Read/Get the values of bookObject attributes
+        // Read/get the values of bookObject attributes
         final EObject loadedBook = loadedBookStore.eContents().get(0);
         final EAttribute bookName = (EAttribute) loadedBook.eClass().getEStructuralFeature("name");
         final String _bookName = (String) loadedBook.eGet(bookName);
